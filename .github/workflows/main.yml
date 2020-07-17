@@ -1,0 +1,25 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DEPLOY_API
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to heroku
+      run: |
+        echo "machine api.heroku.com" > ~/.netrc
+        echo "  login $HEROKU_USERNAME" >> ~/.netrc
+        echo "  password $HEROKU_PASSWORD" >> ~/.netrc
+
+    - name: Publish to heroku git
+      run: |
+        heroku git:remote -a geokit-api
+        git push heroku master
