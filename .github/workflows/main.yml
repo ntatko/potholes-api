@@ -18,6 +18,11 @@ jobs:
         echo "machine api.heroku.com" > ~/.netrc
         echo "  login $HEROKU_USERNAME" >> ~/.netrc
         echo "  password $HEROKU_PASSWORD" >> ~/.netrc
+        
+    - name: Set git variables
+      run: |
+        git config --global user.email "ntat.taco@gmail.com"
+        git config --global user.name "noah tatko"
 
     - name: Publish to heroku git
       run: |
