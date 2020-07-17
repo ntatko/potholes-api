@@ -14,8 +14,14 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Login to heroku
+      env:
+        HEROKU_USERNAME: ${{ secrets.HEROKU_USERNAME }}
+        HEROKU_PASSWORD: ${{ secrets.HEROKU_PASSWORD }}
       run: |
         echo "machine api.heroku.com" > ~/.netrc
+        echo "  login $HEROKU_USERNAME" >> ~/.netrc
+        echo "  password $HEROKU_PASSWORD" >> ~/.netrc
+        echo "machine git.heroku.com" > ~/.netrc
         echo "  login $HEROKU_USERNAME" >> ~/.netrc
         echo "  password $HEROKU_PASSWORD" >> ~/.netrc
         
