@@ -32,6 +32,12 @@ jobs:
 
     - name: Publish to heroku git
       run: |
+        echo "machine api.heroku.com" > ~/.netrc
+        echo "  login $HEROKU_USERNAME" >> ~/.netrc
+        echo "  password $HEROKU_PASSWORD" >> ~/.netrc
+        echo "machine git.heroku.com" > ~/.netrc
+        echo "  login $HEROKU_USERNAME" >> ~/.netrc
+        echo "  password $HEROKU_PASSWORD" >> ~/.netrc
         heroku git:remote -a geokit-api
         echo "::set-output name=date::$(date +'%Y-%m-%d')"
         git add .
