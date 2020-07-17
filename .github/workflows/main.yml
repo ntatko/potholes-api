@@ -9,6 +9,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      HEROKU_USERNAME: ${{ secrets.HEROKU_USERNAME }}
+      HEROKU_PASSWORD: ${{ secrets.HEROKU_PASSWORD }}
 
     steps:
     - uses: actions/checkout@v2
@@ -31,6 +34,9 @@ jobs:
         git config --global user.name "noah tatko"
 
     - name: Publish to heroku git
+      env:
+        HEROKU_USERNAME: ${{ secrets.HEROKU_USERNAME }}
+        HEROKU_PASSWORD: ${{ secrets.HEROKU_PASSWORD }}
       run: |
         echo "machine api.heroku.com" > ~/.netrc
         echo "  login $HEROKU_USERNAME" >> ~/.netrc
