@@ -22,4 +22,7 @@ jobs:
     - name: Publish to heroku git
       run: |
         heroku git:remote -a geokit-api
+        echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        git add .
+        git commit -m "deploy ${{ steps.date.outputs.date }}"
         git push heroku master
