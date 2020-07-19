@@ -24,6 +24,22 @@ router.get('/', async function(req, res, next) {
   }
 });
 
+router.get('/:reportId', async function(req, res, next) {
+  const client = new Client(clientPreferences)
+  await client.connect()
+
+  const query = `SELECT * FROM reports WHERE id=${req.params.reportId}`
+  try{
+    const data = await client.query(query)
+    res.send(data.rows[0])
+  } catch (err) {
+    console.error(err)
+    next(err)
+  } finally {
+    client.end()
+  }
+})
+
 router.post('/', async function(req, res, next) {
   const client = new Client(clientPreferences);
   await client.connect();
@@ -36,6 +52,25 @@ router.post('/', async function(req, res, next) {
     console.log("data", data)
     res.send('Success')
   } catch (err) {
+    console.error(err)
+    next(err)
+  } finally {
+    client.end()
+  }
+})
+
+router.delete('/:reportId', async function(req, res, next) {
+  const client = new Client(clientPreferences);
+  await client.connect();
+  
+  const query = `DELETE FROM reports WHERE id=${req.params.reportId}`
+
+  try{
+    await client.query(query)
+
+    console.log("Successfully deleted", req.params.reportId)
+    res.send('Success')
+  } catch(err) {
     console.error(err)
     next(err)
   } finally {
