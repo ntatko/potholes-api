@@ -78,4 +78,32 @@ router.delete('/:reportId', async function(req, res, next) {
   }
 })
 
+router.patch('/:reportId', async function(req, res, next) {
+  const client = new Client(clientPreferences)
+  await client.connect()
+
+  try{
+    const { rows: [prevReport] } = await client.query(`SELECT * FROM reports WHERE id=${req.params.reportId}`)
+
+    const newReport = { ...prevReport, ...req.body }
+
+    const query = `UPDATE reports SET 
+      priority='${newReport.priority}',
+      location_lat='${newReport.location_lat}',
+      location_lon='${newReport.location_lon}',
+      address='${newReport.address}',
+      image_url='${newReport.image_url}',
+      archived='${newReport.archived}'
+      WHERE id=${req.params.reportId}`
+
+    await client.query(query)
+    res.send('Success')
+  } catch (err) {
+    console.log(err)
+    next(err)
+  } finally {
+    client.end()
+  }
+})
+
 module.exports = router;
