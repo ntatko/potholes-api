@@ -8,39 +8,101 @@ const clientPreferences = {
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-  client.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-    if (err) throw err;
-    for (let row of res.rows) {
-      console.log(JSON.stringify(row));
-    }
-  });
-});
+router.get('/', async function(req, res, next) {
+  const client = new Client(clientPreferences);
+  await client.connect();
 
-router.post('/', async function(req, res, next) {
-
-  const { long, lat, priority, address, imageUrl } = req.body
-  const query = `INSERT INTO reports (priority, location_lat, location_lon, address, image_url, archived) VALUES ('${priority}','${lat}','${long}','${address}','${imageUrl}','false')`
+  const query = `SELECT * FROM reports`;
   try{
-    const client = new Client(clientPreferences);
-    await client.connect();
-
-    const tables = await client.query(`SELECT table_name
-    FROM information_schema.tables
-    WHERE table_schema = 'public'
-    ORDER BY table_name;`)
-    console.log("tables", tables)
-
     const data = await client.query(query)
-    console.log("Successfully inserted", req.body)
-    console.log("data", data)
-    res.send(data)
+    res.send(data.rows)
   } catch (err) {
     console.error(err)
     next(err)
   } finally {
-    client.close()
+    client.end()
+  }
+});
+
+router.get('/:reportId', async function(req, res, next) {
+  const client = new Client(clientPreferences)
+  await client.connect()
+
+  const query = `SELECT * FROM reports WHERE id=${req.params.reportId}`
+  try{
+    const data = await client.query(query)
+    res.send(data.rows[0])
+  } catch (err) {
+    console.error(err)
+    next(err)
+  } finally {
+    client.end()
+  }
+})
+
+router.post('/', async function(req, res, next) {
+  const client = new Client(clientPreferences);
+  await client.connect();
+
+  const { long, lat, priority, address, imageUrl } = req.body
+  const query = `INSERT INTO reports (priority, location_lat, location_lon, address, image_url, archived) VALUES ('${priority}','${lat}','${long}','${address}','${imageUrl}','false');`
+  try{
+    const data = await client.query(query)
+    console.log("Successfully inserted", req.body)
+    console.log("data", data)
+    res.send('Success')
+  } catch (err) {
+    console.error(err)
+    next(err)
+  } finally {
+    client.end()
+  }
+})
+
+router.delete('/:reportId', async function(req, res, next) {
+  const client = new Client(clientPreferences);
+  await client.connect();
+  
+  const query = `DELETE FROM reports WHERE id=${req.params.reportId}`
+
+  try{
+    await client.query(query)
+
+    console.log("Successfully deleted", req.params.reportId)
+    res.send('Success')
+  } catch(err) {
+    console.error(err)
+    next(err)
+  } finally {
+    client.end()
+  }
+})
+
+router.patch('/:reportId', async function(req, res, next) {
+  const client = new Client(clientPreferences)
+  await client.connect()
+
+  try{
+    const { rows: [prevReport] } = await client.query(`SELECT * FROM reports WHERE id=${req.params.reportId}`)
+
+    const newReport = { ...prevReport, ...req.body }
+
+    const query = `UPDATE reports SET 
+      priority='${newReport.priority}',
+      location_lat='${newReport.location_lat}',
+      location_lon='${newReport.location_lon}',
+      address='${newReport.address}',
+      image_url='${newReport.image_url}',
+      archived='${newReport.archived}'
+      WHERE id=${req.params.reportId}`
+
+    await client.query(query)
+    res.send('Success')
+  } catch (err) {
+    console.log(err)
+    next(err)
+  } finally {
+    client.end()
   }
 })
 
