@@ -3,11 +3,11 @@ require('dotenv').config(); // Configure dotenv to load in the .env file
 // Configure aws with your accessKeyId and your secretAccessKey
 aws.config.update({
   region: 'us-east-1', // Put your aws region here
-  accessKeyId: process.env.AWSAccessKeyId,
-  secretAccessKey: process.env.AWSSecretKey
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 })
 
-const S3_BUCKET = process.env.bucket
+const S3_BUCKET = process.env.BUCKET
 // Now lets export this function so we can call it from somewhere else
 const getSignedUrl = (req,res) => {
   const s3 = new aws.S3();  // Create a new instance of S3
