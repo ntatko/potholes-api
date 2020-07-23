@@ -17,8 +17,6 @@ fetch('https://geokit-api.herokuapp.com/report/')
       report => report.image_url.replace('https://geokit-pothole-bucket.s3.amazonaws.com/', '').replace('%3A', ":").replace('%3A', ":")
     ).map(path => decodeURI(path))
 
-    console.log("usedURls", usedUrls)
-
     s3.listObjects(bucketParams, function(err, data) {
       if (err) {
         console.log("Error", err);
