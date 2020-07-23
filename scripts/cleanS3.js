@@ -24,8 +24,7 @@ fetch('https://geokit-api.herokuapp.com/report/')
         const toDelete = data.Contents.filter(({Key}) => {
           return !usedUrls.includes(Key)
         }).map(obj => ({Key: obj.Key}))
-
-        console.log("toDelete", toDelete)
+        
         const options = {
           ...bucketParams,
           Delete: {
