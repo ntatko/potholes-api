@@ -5,6 +5,7 @@ name: DEPLOY_API
 on:
   push:
     branches: [ master ]
+    - paths-ignore: /scripts/
 
 jobs:
   deploy:
