@@ -82,6 +82,7 @@ This is a one to many relationship. Each business will come up with their own ca
 CREATE TABLE categories (
   id SERIAL,
   category VARCHAR(100),
+  requires_image BOOLEAN DEFAULT(1),
   business_id INT NOT NULL,
 
   PRIMARY KEY (id),
@@ -92,7 +93,7 @@ CREATE TABLE categories (
 copy and paste
 ```sql
 DROP TABLE IF EXISTS categories;
-CREATE TABLE categories (id SERIAL, category VARCHAR(100), business_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE);
+CREATE TABLE categories (id SERIAL, category VARCHAR(100), requires_image BOOLEAN DEFAULT(1), business_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE);
 ```
 
 ### Users + Business
