@@ -31,7 +31,7 @@ CREATE TABLE reports (id SERIAL, location_lat float, location_lon float, address
 ### Business
 
 ```sql
-CREATE TABLE business (
+CREATE TABLE businesses (
   id SERIAL,
   business_name: VARCHAR(100),
   createdDate TIMESTAMP DEFAULT(NOW()),
@@ -42,7 +42,7 @@ CREATE TABLE business (
 
 Copy and paste
 ```sql
-CREATE TABLE business (id SERIAL, business_name: VARCHAR(100), createdDate TIMESTAMP DEFAULT(NOW()), PRIMARY KEY (id));
+CREATE TABLE businesses (id SERIAL, business_name: VARCHAR(100), createdDate TIMESTAMP DEFAULT(NOW()), PRIMARY KEY (id));
 ```
 
 ### Users
@@ -77,7 +77,7 @@ To match the above tables to one another
 This is a one to many relationship. Each business will come up with their own categories.
 
 ```sql
-CREATE TABLE category (
+CREATE TABLE categories (
   id SERIAL,
   category VARCHAR(100),
   business_id INT NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE category (
 
 copy and paste
 ```sql
-CREATE TABLE category (id SERIAL, category VARCHAR(100), business_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE);
+CREATE TABLE categories (id SERIAL, category VARCHAR(100), business_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE);
 ```
 
 ### Users + Business
@@ -120,7 +120,7 @@ CREATE TABLE user_business (id SERIAL, user_id INT NOT NULL, business_id INT NOT
 Joins reports and businesses.
 
 ```sql
-CREATE TABLE business_reports (
+CREATE TABLE business_report (
   id SERIAL,
   business_id INT NOT NULL,
   report_id INT NOT NULL,
@@ -133,5 +133,26 @@ CREATE TABLE business_reports (
 
 copy and paste
 ```sql
-CREATE TABLE business_reports (id SERIAL, business_id INT NOT NULL, report_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE, FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE);
+CREATE TABLE business_report (id SERIAL, business_id INT NOT NULL, report_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (business_id) REFERENCES business(id) ON DELETE CASCADE, FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE);
+```
+
+### Assignments (Users + Reports)
+
+We may want to assign a user to a report someday
+
+```sql
+CREATE TABLE assignments (
+  id SERIAL,
+  user_id INT NOT NULL,
+  report_id INT NOT NULL,
+
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE
+);
+```
+
+copy and paste
+```sql
+CREATE TABLE assignments (id SERIAL, user_id INT NOT NULL, report_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE);
 ```
