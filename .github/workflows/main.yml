@@ -5,7 +5,9 @@ name: DEPLOY_API
 on:
   push:
     branches: [ master ]
-    paths-ignore: /scripts/
+    paths-ignore:
+      - 'scripts/*'
+      - 'README.md'
 
 jobs:
   deploy:
