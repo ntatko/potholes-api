@@ -7,6 +7,7 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var reportRouter = require('./routes/reports');
+var resetRouter = require('./routes/reset');
 
 var app = express();
 app.use(cors())
@@ -23,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/report', reportRouter);
+app.use('/reset', resetRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

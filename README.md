@@ -18,15 +18,19 @@ CREATE TABLE reports (
   createdDate TIMESTAMP DEFAULT(NOW()),
   description VARCHAR(500),
   fixedDate TIMESTAMP,
+  reportedBy INT NOT NULL,
+  fixedBy INT,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (reportedBy) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (fixedBy) REFERENCES users(id) ON DELETE SET NULL
 );
 ```
 
 Copy and paste
 ```sql
 DROP TABLE IF EXISTS reports CASCADE;
-CREATE TABLE reports (id SERIAL, location_lat float, location_lon float, address VARCHAR(300), image_url VARCHAR(500), fixed BOOLEAN, createdDate TIMESTAMP DEFAULT(NOW()), description VARCHAR(500), fixedDate TIMESTAMP, PRIMARY KEY (id));
+CREATE TABLE reports (id SERIAL, location_lat float, location_lon float, address VARCHAR(300), image_url VARCHAR(500), fixed BOOLEAN, createdDate TIMESTAMP DEFAULT(NOW()), description VARCHAR(500), fixedDate TIMESTAMP, reportedBy INT NOT NULL, fixedBy INT, PRIMARY KEY (id), FOREIGN KEY (reportedBy) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (fixedBy) REFERENCES users(id) ON DELETE SET NULL);
 ```
 
 ### Business
@@ -68,7 +72,7 @@ CREATE TABLE users (
 Copy and paste
 ```sql
 DROP TABLE IF EXISTS users CASCADE;
-CREATE TABLE users (email VARCHAR(100) NOT NULL, phone VARCHAR(14), name VARCHAR(300), phone_verified BOOLEAN DEFAULT(false), email_verified BOOLEAN DEFAULT(false), createdDate TIMESTAMP DEFAULT(NOW()), PRIMARY KEY(email));
+CREATE TABLE users (id serial, email VARCHAR(100) NOT NULL, phone VARCHAR(14), name VARCHAR(300), phone_verified BOOLEAN DEFAULT(false), email_verified BOOLEAN DEFAULT(false), createdDate TIMESTAMP DEFAULT(NOW()), PRIMARY KEY(id));
 ```
 
 ## Relational Tables
