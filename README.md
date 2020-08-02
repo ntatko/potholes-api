@@ -10,8 +10,8 @@ The actual reported things
 ```sql
 CREATE TABLE reports (
   id SERIAL,
-  location_lat float,
-  location_lon float,
+  location_lat FLOAT,
+  location_lon FLOAT,
   address VARCHAR(300),
   image_url VARCHAR(500),
   fixed BOOLEAN,
@@ -30,7 +30,7 @@ CREATE TABLE reports (
 Copy and paste
 ```sql
 DROP TABLE IF EXISTS reports CASCADE;
-CREATE TABLE reports (id SERIAL, location_lat float, location_lon float, address VARCHAR(300), image_url VARCHAR(500), fixed BOOLEAN, createdDate TIMESTAMP DEFAULT(NOW()), description VARCHAR(500), fixedDate TIMESTAMP, reportedBy INT NOT NULL, fixedBy INT, PRIMARY KEY (id), FOREIGN KEY (reportedBy) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (fixedBy) REFERENCES users(id) ON DELETE SET NULL);
+CREATE TABLE reports (id SERIAL, location_lat FLOAT, location_lon FLOAT, address VARCHAR(300), image_url VARCHAR(500), fixed BOOLEAN, createdDate TIMESTAMP DEFAULT(NOW()), description VARCHAR(500), fixedDate TIMESTAMP, reportedBy INT NOT NULL, fixedBy INT, PRIMARY KEY (id), FOREIGN KEY (reportedBy) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (fixedBy) REFERENCES users(id) ON DELETE SET NULL);
 ```
 
 ### Business
@@ -39,7 +39,12 @@ CREATE TABLE reports (id SERIAL, location_lat float, location_lon float, address
 CREATE TABLE businesses (
   id SERIAL,
   business_name VARCHAR(100),
+  home_lat FLOAT,
+  home_long FLOAT,
+  home_zoom INT,
   createdDate TIMESTAMP DEFAULT(NOW()),
+  bounding_geom FLOAT ARRAY,
+  business_url VARCHAR(500),
 
   PRIMARY KEY (id)
 );
@@ -48,7 +53,7 @@ CREATE TABLE businesses (
 Copy and paste
 ```sql
 DROP TABLE IF EXISTS businesses CASCADE;
-CREATE TABLE businesses (id SERIAL, business_name VARCHAR(100), createdDate TIMESTAMP DEFAULT(NOW()), PRIMARY KEY (id));
+CREATE TABLE businesses (id SERIAL, business_name VARCHAR(100), home_lat FLOAT, home_long FLOAT, home_zoom INT, createdDate TIMESTAMP DEFAULT(NOW()), bounding_geom FLOAT ARRAY, business_url VARCHAR(500), PRIMARY KEY (id));
 ```
 
 ### Users

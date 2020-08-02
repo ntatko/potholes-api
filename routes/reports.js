@@ -44,8 +44,8 @@ router.post('/', async function(req, res, next) {
   const client = new Client(clientPreferences);
   await client.connect();
 
-  const { long, lat, priority, address, imageUrl } = req.body
-  const query = `INSERT INTO reports (priority, location_lat, location_lon, address, image_url, archived) VALUES ('${priority}','${lat}','${long}','${address}','${imageUrl}','false');`
+  const { long, lat, address, imageUrl, userId } = req.body
+  const query = `INSERT INTO reports (location_lat, location_lon, address, image_url, reportedBy) VALUES ('${lat}','${long}','${address}','${imageUrl}','${userId}');`
   try{
     const data = await client.query(query)
     console.log("Successfully inserted", req.body)

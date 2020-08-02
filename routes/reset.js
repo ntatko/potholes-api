@@ -8,7 +8,7 @@ const clientPreferences = {
 
 const primaryTables = [ // found in the readme.md file
   `DROP TABLE IF EXISTS businesses CASCADE;`,
-  `CREATE TABLE businesses (id SERIAL, business_name VARCHAR(100), createdDate TIMESTAMP DEFAULT(NOW()), PRIMARY KEY (id));`,
+  `CREATE TABLE businesses (id SERIAL, business_name VARCHAR(100), home_lat FLOAT, home_long FLOAT, home_zoom INT, createdDate TIMESTAMP DEFAULT(NOW()), bounding_geom FLOAT ARRAY, business_url VARCHAR(500), PRIMARY KEY (id));`,
   `DROP TABLE IF EXISTS users CASCADE;`,
   `CREATE TABLE users (id serial, email VARCHAR(100) NOT NULL, phone VARCHAR(14), name VARCHAR(300), phone_verified BOOLEAN DEFAULT(false), email_verified BOOLEAN DEFAULT(false), createdDate TIMESTAMP DEFAULT(NOW()), PRIMARY KEY(id));`,
 ];
